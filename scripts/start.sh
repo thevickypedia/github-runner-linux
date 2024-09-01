@@ -39,15 +39,19 @@ else
     echo "Unknown OS: $(uname)"
 fi
 
-DEFAULT_LABEL="$os_name-$architecture"
-RUNNER_SUFFIX="$(head -c 20 /dev/urandom | tr -dc 'a-z0-9' | fold -w 5 | head -n 1)"
-DEFAULT_RUNNER_NAME="docker-node-${RUNNER_SUFFIX}"
+instance_id() {
+  # Use randomly generated instance IDs (AWS format) as default runner names
+  letters=$(tr -dc '[:lower:]' < /dev/urandom | head -c 4)
+  digits=$(tr -dc '0-9' < /dev/urandom | head -c 12)
+  eid=$(echo "$letters$digits" | fold -w1 | shuf | tr -d '\n')
+  echo "0$eid"
+}
 
 # Env vars (docker-compose.yml)
-RUNNER_NAME="${RUNNER_NAME:-$DEFAULT_RUNNER_NAME}"
-RUNNER_GROUP="${RUNNER_GROUP:-default}"
-WORK_DIR="${WORK_DIR:-_work}"
-LABELS="${LABELS:-$DEFAULT_LABEL}"
+RUNNER_NAME="${RUNNER_NAME:-"i-$(instance_id)"}"
+RUNNER_GROUP="${RUNNER_GROUP:-"default"}"
+WORK_DIR="${WORK_DIR:-"_work"}"
+LABELS="${LABELS:-"docker-node,$os_name-$architecture"}"
 
 repo_level_runner() {
     # https://docs.github.com/en/rest/actions/self-hosted-runners#create-a-registration-token-for-a-repository

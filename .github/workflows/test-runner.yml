@@ -29,7 +29,8 @@ jobs:
       run: go version
       shell: bash
     - name: Verify 'node'
-      run: |
-        node --version
-        npm --version
+      run: node --version
+      shell: bash
+    - name: Verify 'npm'
+      run: npm --version
       shell: bash

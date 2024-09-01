@@ -8,10 +8,16 @@ services:
       context: .
       args:
         RUNNER_VERSION: '2.319.1'
+    restart: always
+    env_file:
+      - './.env'
     environment:
       GIT_TOKEN: ${GIT_TOKEN}
       GIT_OWNER: ${GIT_OWNER}
       GIT_REPOSITORY: ${GIT_REPOSITORY}
       RUNNER_GROUP: ${RUNNER_GROUP}
+      RUNNER_NAME: ${RUNNER_NAME}
       WORK_DIR: ${WORK_DIR}
       LABELS: ${LABELS}
+    container_name: docker-github-runner-linux
+    working_dir: /home/docker

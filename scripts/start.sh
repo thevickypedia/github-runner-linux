@@ -21,7 +21,7 @@ case $unamem in
     ;;
 esac
 
-unameu="$(tr '[:lower:]' '[:upper:]' <<<$(uname))"
+unameu="$(tr '[:lower:]' '[:upper:]' <<< "$(uname)")"
 if [[ $unameu == *DARWIN* ]]; then
     os_name="darwin"
 elif [[ $unameu == *LINUX* ]]; then
@@ -40,26 +40,23 @@ else
 fi
 
 DEFAULT_LABEL="$os_name-$architecture"
-
-RUNNER_SUFFIX=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 5 | head -n 1)
-RUNNER_NAME="docker-node-${RUNNER_SUFFIX}"
+RUNNER_SUFFIX="$(head -c 20 /dev/urandom | tr -dc 'a-z0-9' | fold -w 5 | head -n 1)"
+DEFAULT_RUNNER_NAME="docker-node-${RUNNER_SUFFIX}"
 
 # Env vars (docker-compose.yml)
+RUNNER_NAME="${RUNNER_NAME:-$DEFAULT_RUNNER_NAME}"
 RUNNER_GROUP="${RUNNER_GROUP:-default}"
 WORK_DIR="${WORK_DIR:-_work}"
 LABELS="${LABELS:-$DEFAULT_LABEL}"
 
-if [ -n "${GIT_REPOSITORY}" ]; then
-    echo "Creating repository level self-hosted runner ['${RUNNER_NAME}'] for ${GIT_REPOSITORY}"
+repo_level_runner() {
     # https://docs.github.com/en/rest/actions/self-hosted-runners#create-a-registration-token-for-a-repository
     REG_TOKEN=$(curl -sX POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${GIT_TOKEN}" \
-            "https://api.github.com/repos/${GIT_OWNER}/${GIT_REPOSITORY}/actions/runners/registration-token" \
-            | jq .token --raw-output)
-
-    cd /home/docker/actions-runner
-
+        -H "Accept: application/vnd.github.v3+json" \
+        -H "Authorization: token ${GIT_TOKEN}" \
+        "https://api.github.com/repos/${GIT_OWNER}/${GIT_REPOSITORY}/actions/runners/registration-token" \
+        | jq .token --raw-output)
+    cd "/home/docker/actions-runner" || exit 1
     ./config.sh --unattended \
         --work "${WORK_DIR}" \
         --labels "${LABELS}" \
@@ -67,19 +64,18 @@ if [ -n "${GIT_REPOSITORY}" ]; then
         --name "${RUNNER_NAME}" \
         --runnergroup "${RUNNER_GROUP}" \
         --url "https://github.com/${GIT_OWNER}/${GIT_REPOSITORY}"
-else
-    echo "Creating organization level self-hosted runner '${RUNNER_NAME}'"
+}
+
+org_level_runner() {
     # https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#restricting-the-use-of-self-hosted-runners
     # https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#self-hosted-runner-security
     # https://docs.github.com/en/rest/actions/self-hosted-runners#create-a-registration-token-for-an-organization
     REG_TOKEN=$(curl -sX POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${GIT_TOKEN}" \
-            "https://api.github.com/orgs/${GIT_OWNER}/actions/runners/registration-token" \
-            | jq .token --raw-output)
-
-    cd /home/docker/actions-runner
-
+        -H "Accept: application/vnd.github.v3+json" \
+        -H "Authorization: token ${GIT_TOKEN}" \
+        "https://api.github.com/orgs/${GIT_OWNER}/actions/runners/registration-token" \
+        | jq .token --raw-output)
+    cd "/home/docker/actions-runner" || exit 1
     ./config.sh \
         --work "${WORK_DIR}" \
         --labels "${LABELS}" \
@@ -87,11 +83,19 @@ else
         --name "${RUNNER_NAME}" \
         --runnergroup "${RUNNER_GROUP}" \
         --url "https://github.com/${GIT_OWNER}"
+}
+
+if [ -n "${GIT_REPOSITORY}" ]; then
+    echo "Creating repository level self-hosted runner ['${RUNNER_NAME}'] for ${GIT_REPOSITORY}"
+    repo_level_runner
+else
+    echo "Creating organization level self-hosted runner '${RUNNER_NAME}'"
+    org_level_runner
 fi
 
 cleanup() {
     echo "Removing runner..."
-    ./config.sh remove --unattended --token ${REG_TOKEN}
+    ./config.sh remove --token "${REG_TOKEN}"
 }
 
 trap 'cleanup; exit 130' INT

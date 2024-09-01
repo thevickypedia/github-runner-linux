@@ -1,10 +1,28 @@
 name: Local runner test
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   test-runner:
-    runs-on: [self-hosted]
+    runs-on: docker-node
     steps:
     - uses: actions/checkout@v4
+    - name: Verify 'curl'
+      run: curl --version
+    - name: Verify 'git'
+      run: git --version
+    - name: Verify 'jq'
+      run: jq --version
+    - name: Verify 'python'
+      run: python -V
+    - name: Verify 'rust'
+      run: rustc --version
+    - name: Verify 'go'
+      run: go version
+    - name: Verify 'node'
+      run: |
+        node --version
+        npm --version

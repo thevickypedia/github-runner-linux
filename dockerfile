@@ -1,19 +1,24 @@
-# base image
 FROM ubuntu:22.04
 
-#input GitHub runner version argument
+SHELL ["/bin/bash", "-c"]
+
 ARG RUNNER_VERSION
+ENV RUNNER_VERSION="${RUNNER_VERSION:-2.319.1}"
 ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME="/home/docker"
+ENV RELEASE_URL="https://github.com/actions/runner/releases"
 
-LABEL RunnerVersion=${RUNNER_VERSION}
+# Set top-level working directory
+WORKDIR ${HOME}
 
-# update the base packages + add a non-sudo user
-RUN apt-get update -y && apt-get upgrade -y && useradd -m docker
+# Update the base packages and add a non-sudo user
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
+    useradd -m docker
 
 # install the packages and dependencies along with jq so we can parse JSON (add additional packages as necessary)
 RUN apt-get install -y --no-install-recommends \
     curl \
-    nodejs \
     wget \
     unzip \
     vim \
@@ -25,24 +30,30 @@ RUN apt-get install -y --no-install-recommends \
     python3.10 \
     python3.10-venv \
     python3.10-dev \
-    python3-pip
+    python3-pip \
+    nodejs \
+    golang-go
 
-# cd into the user directory, download and unzip the github actions runner
-RUN cd /home/docker && mkdir actions-runner && cd actions-runner \
-    && curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
+# Create a symbolic link for python pointing to python3.10
+RUN ln -s /usr/bin/python3.10 /usr/bin/python
+
+# https://github.com/rust-lang/rustup/issues/297#issuecomment-444818896
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+# Download and unzip the github actions runner
+RUN mkdir actions-runner && cd actions-runner \
+    && curl -O -L ${RELEASE_URL}/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
     && tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
 
-# install some additional dependencies
+# Install additional dependencies
 RUN chown -R docker ~docker && /home/docker/actions-runner/bin/installdependencies.sh
 
-# add over the start.sh script
+# Add start script and make it executable
 ADD scripts/start.sh start.sh
-
-# make the script executable
 RUN chmod +x start.sh
 
-# set the user to "docker" so all subsequent commands are run as the docker user
+# Set the user to "docker" so all subsequent commands are run as the docker user
 USER docker
 
-# set the entrypoint to the start.sh script
+# Set the entrypoint to the start.sh script
 ENTRYPOINT ["./start.sh"]

@@ -1,0 +1,9 @@
+#Docker variables
+*.env
+.env
+
+#VSCODE
+.vscode/*
+
+# Built Visual Studio Code Extensions
+*.vsix

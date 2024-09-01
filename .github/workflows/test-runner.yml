@@ -1,0 +1,10 @@
+name: Local runner test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-runner:
+    runs-on: [self-hosted]
+    steps:
+    - uses: actions/checkout@v4

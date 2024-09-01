@@ -12,17 +12,24 @@ jobs:
     - uses: actions/checkout@v4
     - name: Verify 'curl'
       run: curl --version
+      shell: bash
     - name: Verify 'git'
       run: git --version
+      shell: bash
     - name: Verify 'jq'
       run: jq --version
+      shell: bash
     - name: Verify 'python'
       run: python -V
+      shell: bash
     - name: Verify 'rust'
       run: rustc --version
+      shell: bash
     - name: Verify 'go'
       run: go version
+      shell: bash
     - name: Verify 'node'
       run: |
         node --version
         npm --version
+      shell: bash

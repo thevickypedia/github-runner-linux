@@ -39,6 +39,7 @@ RUN ln -s /usr/bin/python3.10 /usr/bin/python
 
 # https://github.com/rust-lang/rustup/issues/297#issuecomment-444818896
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="${HOME}/.cargo/bin:${PATH}"
 
 # Download and unzip the github actions runner
 RUN mkdir actions-runner && cd actions-runner \

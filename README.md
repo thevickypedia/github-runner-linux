@@ -13,3 +13,9 @@ docker build --build-arg RUNNER_VERSION=2.319.1 -t runner .
 ```
 docker compose up -d
 ```
+
+### Exec
+
+```
+docker exec -it container-name sh
+```

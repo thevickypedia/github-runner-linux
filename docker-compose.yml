@@ -9,6 +9,9 @@ services:
       args:
         RUNNER_VERSION: '2.319.1'
     environment:
-      GH_TOKEN: ${GIT_TOKEN}
-      GH_OWNER: ${GIT_OWNER}
-      GH_REPOSITORY: ${GIT_REPOSITORY}
+      GIT_TOKEN: ${GIT_TOKEN}
+      GIT_OWNER: ${GIT_OWNER}
+      GIT_REPOSITORY: ${GIT_REPOSITORY}
+      RUNNER_GROUP: ${RUNNER_GROUP}
+      WORK_DIR: ${WORK_DIR}
+      LABELS: ${LABELS}

@@ -22,8 +22,14 @@ jobs:
     - name: Verify 'python'
       run: python -V
       shell: bash
-    - name: Verify 'rust'
+    - name: Verify 'rustc'
       run: rustc --version
+      shell: bash
+    - name: Verify 'cargo'
+      run: cargo --version
+      shell: bash
+    - name: Verify 'rustfmt'
+      run: rustfmt --version
       shell: bash
     - name: Verify 'go'
       run: go version

@@ -1,12 +1,10 @@
+# IntelIJ
 .DS_Store
 .idea
 
-#Docker variables
+# Docker variables
 *.env
 .env
 
-#VSCODE
+# VSCode
 .vscode/*
-
-# Built Visual Studio Code Extensions
-*.vsix

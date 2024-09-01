@@ -16,7 +16,7 @@ RUN apt-get update -y && \
     apt-get upgrade -y && \
     useradd -m docker
 
-# install the packages and dependencies along with jq so we can parse JSON (add additional packages as necessary)
+# Install the packages and dependencies
 RUN apt-get install -y --no-install-recommends \
     curl \
     wget \
@@ -32,7 +32,7 @@ RUN apt-get install -y --no-install-recommends \
     python3.10-dev \
     python3-pip \
     nodejs \
-    npm  \
+    npm \
     golang-go
 
 # Create a symbolic link for python pointing to python3.10
@@ -52,7 +52,9 @@ RUN chown -R docker ~docker && /home/docker/actions-runner/bin/installdependenci
 
 # Add start script and make it executable
 ADD scripts/start.sh start.sh
+ADD scripts/detector.sh detector.sh
 RUN chmod +x start.sh
+RUN chmod +x detector.sh
 
 # Set the user to "docker" so all subsequent commands are run as the docker user
 USER docker

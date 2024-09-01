@@ -5,7 +5,7 @@ Build a self-hosted GitHub action runner as an Ubuntu linux container
 ### Build
 
 ```shell
-docker build --build-arg RUNNER_VERSION=2.319.1 -t runner .
+docker build -t runner .
 ```
 
 ### Run

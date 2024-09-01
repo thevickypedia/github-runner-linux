@@ -1,6 +1,6 @@
-# docker-github-runner-linux
+# GitHub Runner Linux
 
-Repository for building a self-hosted GitHub runner as a ubuntu linux container
+Build a self-hosted GitHub action runner as an Ubuntu linux container
 
 ### Build
 

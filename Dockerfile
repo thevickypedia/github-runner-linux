@@ -32,6 +32,7 @@ RUN apt-get install -y --no-install-recommends \
     python3.10-dev \
     python3-pip \
     nodejs \
+    npm  \
     golang-go
 
 # Create a symbolic link for python pointing to python3.10

@@ -1,13 +1,11 @@
 ---
 services:
   runner:
-    image: runner:latest
+    image: thevickypedia/github-runner-linux
     build:
       context: .
-      args:
-        RUNNER_VERSION: '2.319.1'
     restart: always
-    env_file: '.env'
+    # env_file: '.env'
     environment:
       GIT_TOKEN: ${GIT_TOKEN}
       GIT_OWNER: ${GIT_OWNER}

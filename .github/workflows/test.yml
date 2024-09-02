@@ -1,4 +1,4 @@
-name: Local runner test
+name: Test Runner
 
 on:
   push:

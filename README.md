@@ -2,13 +2,7 @@
 
 Build a self-hosted GitHub action runner as an Ubuntu linux container
 
-### Build
-
-```shell
-docker build -t runner .
-```
-
-### Run
+## Development
 
 Set latest `RUNNER_VERSION`
 
@@ -19,11 +13,19 @@ export RUNNER_VERSION=$(curl -sL \
       https://api.github.com/repos/actions/runner/releases/latest | jq .tag_name --raw-output)
 ```
 
+#### Build
+
+```shell
+docker build --build-arg RUNNER_VERSION=$RUNNER_VERSION -t runner .
+```
+
+#### Run
+
 ```shell
 docker compose up -d
 ```
 
-### Exec
+#### Exec
 
 ```shell
 docker exec -it container-name sh

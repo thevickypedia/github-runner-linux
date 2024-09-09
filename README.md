@@ -28,6 +28,10 @@ docker compose up -d
 - **RUNNER_NAME** - Runner name. Uses a random instance ID.
 - **WORK_DIR** - Work directory. Uses `_work`
 - **LABELS** - Runner labels (comma separated). Uses `"docker-node,${os_name}-${architecture}"`
+- **REUSE_EXISTING** - Re-use existing configuration. Defaults to `false`
+
+> `REUSE_EXISTING` can come in handy when a container restarts due to a problem,
+> or when a container is deleted without gracefully shutting down. 
 
 ## Development
 

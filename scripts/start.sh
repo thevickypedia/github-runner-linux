@@ -24,6 +24,7 @@ RUNNER_NAME="${RUNNER_NAME:-"$(instance_id)"}"
 RUNNER_GROUP="${RUNNER_GROUP:-"default"}"
 WORK_DIR="${WORK_DIR:-"_work"}"
 LABELS="${LABELS:-"docker-node,$os_name-$architecture"}"
+REUSE_EXISTING="${REUSE_EXISTING:-"false"}"
 
 repo_level_runner() {
     # https://docs.github.com/en/rest/actions/self-hosted-runners#create-a-registration-token-for-a-repository
@@ -61,12 +62,19 @@ org_level_runner() {
         --url "https://github.com/${GIT_OWNER}"
 }
 
-if [ -n "${GIT_REPOSITORY}" ]; then
-    echo "Creating a repository level self-hosted runner ['${RUNNER_NAME}'] for ${GIT_REPOSITORY}"
-    repo_level_runner
+if [[ "$REUSE_EXISTING" == "true" || "$REUSE_EXISTING" == "1" ]] &&
+   [[ -d "/home/docker/actions-runner" ]] &&
+   [[ -f "/home/docker/actions-runner/config.sh" ]] &&
+   [[ -f "/home/docker/actions-runner/run.sh" ]]; then
+    echo "Existing configuration found. Re-using it..."
 else
-    echo "Creating an organization level self-hosted runner '${RUNNER_NAME}'"
-    org_level_runner
+  if [[ -n "$GIT_REPOSITORY" ]]; then
+      echo "Creating a repository level self-hosted runner ['${RUNNER_NAME}'] for ${GIT_REPOSITORY}"
+      repo_level_runner
+  else
+      echo "Creating an organization level self-hosted runner '${RUNNER_NAME}'"
+      org_level_runner
+  fi
 fi
 
 cleanup() {

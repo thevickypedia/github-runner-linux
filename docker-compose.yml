@@ -14,5 +14,6 @@ services:
       RUNNER_NAME: ${RUNNER_NAME}
       WORK_DIR: ${WORK_DIR}
       LABELS: ${LABELS}
+      REUSE_EXISTING: true
     container_name: github-runner-linux
     working_dir: /home/docker

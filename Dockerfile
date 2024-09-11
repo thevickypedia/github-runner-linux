@@ -50,11 +50,9 @@ RUN mkdir actions-runner && cd actions-runner \
 # Install additional dependencies
 RUN chown -R docker ~docker && /home/docker/actions-runner/bin/installdependencies.sh
 
-# Add start script and make it executable
-ADD scripts/start.sh start.sh
-ADD scripts/detector.sh detector.sh
-RUN chmod +x start.sh
-RUN chmod +x detector.sh
+# Copy ALL scripts make them executable
+COPY scripts/* .
+RUN chmod +x *.sh
 
 # Set the user to "docker" so all subsequent commands are run as the docker user
 USER docker

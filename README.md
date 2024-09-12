@@ -1,6 +1,7 @@
 # GitHub Runner Linux
 
 [![Test Runner][badges-test]][links-test]
+<br>
 [![Build and Publish][badges-build]][links-build]
 
 Spin up an on-demand self-hosted GitHub action runner with multi-arch supported Ubuntu image.
@@ -31,6 +32,7 @@ docker compose up -d
 - **REUSE_EXISTING** - Re-use existing configuration. Defaults to `false`
 
 > [!NOTE]
+> 
 > `REUSE_EXISTING` flag can be useful when a container restarts due to an issue or
 > when a container is reused after being terminated without shutting down gracefully.
 > <details>
@@ -55,9 +57,10 @@ docker compose up -d
 > ```
 > </details>
 
-> [!WARNING]  
-Using this image **without** the env var `GIT_REPOSITORY` will create an organization level runner.
-Using self-hosted runners in public repositories pose some considerable security threats.
+> [!WARNING]
+> 
+> Using this image **without** the env var `GIT_REPOSITORY` will create an organization level runner.<br>
+> Using self-hosted runners in public repositories pose some considerable security threats.
 > - [#self-hosted-runner-security]
 > - [#restricting-the-use-of-self-hosted-runners]
 > - [#configuring-required-approval-for-workflows-from-public-forks]

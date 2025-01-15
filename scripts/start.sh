@@ -13,6 +13,7 @@ source "${current_dir}/detector.sh"
 source "${current_dir}/config.sh"
 source "${current_dir}/notify.sh"
 source "${current_dir}/squire.sh"
+source "${current_dir}/openssl.sh"
 
 # Env vars (docker-compose.yml)
 RUNNER_NAME="${RUNNER_NAME:-"$(instance_id)"}"

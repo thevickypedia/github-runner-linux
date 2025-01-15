@@ -32,6 +32,9 @@ jobs:
     - name: Verify 'rustfmt'
       run: rustfmt --version
       shell: bash
+    - name: Verify 'openssl'
+      run: openssl version
+      shell: bash
     - name: Verify 'go'
       run: go version
       shell: bash
@@ -40,4 +43,13 @@ jobs:
       shell: bash
     - name: Verify 'npm'
       run: npm --version
+      shell: bash
+    - name: Verify 'OPENSSL_LIB_DIR'
+      run: echo "$OPENSSL_LIB_DIR"
+      shell: bash
+    - name: Verify 'OPENSSL_INCLUDE_DIR'
+      run: echo "$OPENSSL_INCLUDE_DIR"
+      shell: bash
+    - name: Verify 'OPENSSL_STATIC'
+      run: echo "$OPENSSL_STATIC"
       shell: bash

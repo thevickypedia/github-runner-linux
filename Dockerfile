@@ -24,6 +24,7 @@ RUN apt-get install -y --no-install-recommends \
     vim \
     git \
     jq \
+    findutils \
     build-essential \
     libssl-dev \
     libffi-dev \
@@ -41,6 +42,21 @@ RUN ln -s /usr/bin/python3.10 /usr/bin/python
 # https://github.com/rust-lang/rustup/issues/297#issuecomment-444818896
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="${HOME}/.cargo/bin:${PATH}"
+
+# Find OpenSSL paths, set environment variables, and persist them
+RUN OPENSSL_LIB_PATH=$(find / -name 'libssl.so*' 2>/dev/null | head -n 1) && \
+    OPENSSL_LIB_DIR=$(dirname "$OPENSSL_LIB_PATH") && \
+    OPENSSL_INCLUDE_PATH=$(find /usr -name 'ssl.h' 2>/dev/null | grep -v '/node/' | head -n 1) && \
+    OPENSSL_INCLUDE_DIR=$(dirname "$OPENSSL_INCLUDE_PATH") && \
+    echo "OPENSSL_LIB_DIR=$OPENSSL_LIB_DIR" && \
+    echo "OPENSSL_INCLUDE_DIR=$OPENSSL_INCLUDE_DIR" && \
+    echo "OPENSSL_STATIC=$OPENSSL_STATIC" && \
+    export OPENSSL_LIB_DIR OPENSSL_INCLUDE_DIR
+
+# Set the environment variables for future stages (persistent across containers)
+ENV OPENSSL_LIB_DIR=$OPENSSL_LIB_DIR \
+    OPENSSL_INCLUDE_DIR=$OPENSSL_INCLUDE_DIR \
+    OPENSSL_STATIC=1
 
 # Download and unzip the github actions runner
 RUN mkdir actions-runner && cd actions-runner \

@@ -3,6 +3,19 @@
 # This is the opposite of the default shell behaviour, which is to ignore errors in scripts.
 set -e
 
+# Set GitHub Server URL
+export GITHUB_API_URL="${GITHUB_API_URL:-"https://api.github.com"}"
+export GITHUB_SERVER_URL="${GITHUB_SERVER_URL:-"https://github.com"}"
+
+if [[ -z "$GIT_OWNER" ]]; then
+	echo "ERROR: Please set the GIT_OWNER environment variable"
+	exit 1
+fi
+if [[ -z "$GIT_TOKEN" ]]; then
+	echo "ERROR: Please set the GIT_TOKEN environment variable"
+	exit 1
+fi
+
 # Set defaults
 os_name=""
 architecture=""

@@ -1,8 +1,13 @@
 ---
 services:
   runner:
-    image: thevickypedia/github-runner-linux
+    build:
+      context: .
+      args:
+        - PLATFORM=linux/arm64
+    image: github-runner-linux
     restart: always
+    platform: linux/arm64
     # Load environment variables from a file
     # env_file: '.env'
     # Env vars defined under environment will override those from the env_file

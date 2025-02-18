@@ -44,7 +44,7 @@ ENV PATH="${HOME}/.cargo/bin:${PATH}"
 
 # Download and unzip the github actions runner
 RUN mkdir actions-runner && cd actions-runner \
-    && curl -O -L ${RELEASE_URL}/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
+    && curl -kOL ${RELEASE_URL}/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
     && tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
 
 # Install additional dependencies

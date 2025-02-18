@@ -8,23 +8,43 @@ Spin up an on-demand self-hosted GitHub action runner with multi-arch supported 
 
 ## Usage
 
-**Docker Run**
+**Pre-built [platform agnostic]**
 
 ```shell
 docker run thevickypedia/github-runner-linux
 ```
 
-**[Docker Compose][docker-compose]**
+**Build from source [platform specific]**
 
 ```shell
-docker compose up -d
+git clone https://github.com/thevickypedia/github-runner-linux.git
+cd github-runner-linux
+```
+
+**Imperative**
+
+```shell
+docker build --platform linux/amd64 -t github-runner-linux .
+docker run --platform linux/amd64 github-runner-linux
+```
+
+**Declarative**
+
+```shell
+docker compose -f docker-compose-amd64.yml up
 ```
 
 ### Environment Variables
 
+**Mandatory**
+
 - **GIT_TOKEN** - Required for authentication to add runners.
 - **GIT_OWNER** - GitHub account username [OR] organization name.
+
+**Optional**
+
 - **GIT_REPOSITORY** - Repository name _(required to create runners dedicated to a particular repo)_
+- **RUNNER_VERSION** - GitHub runner version. Uses `latest` runner version.
 - **RUNNER_GROUP** - Runner group. Uses `default`
 - **RUNNER_NAME** - Runner name. Uses a random instance ID.
 - **WORK_DIR** - Work directory. Uses `_work`
@@ -129,6 +149,8 @@ docker build --build-arg RUNNER_VERSION=$RUNNER_VERSION -t runner .
 [badges-build]: https://github.com/thevickypedia/github-runner-linux/actions/workflows/main.yml/badge.svg
 [links-build]: https://github.com/thevickypedia/github-runner-linux/actions/workflows/main.yml
 [docker-compose]: https://github.com/thevickypedia/github-runner-linux/blob/main/docker-compose.yml
+[docker-compose-amd64]: https://github.com/thevickypedia/github-runner-linux/blob/main/docker-compose-amd64.yml
+[docker-compose-arm64]: https://github.com/thevickypedia/github-runner-linux/blob/main/docker-compose-arm64.yml
 [ntfy]: https://ntfy.sh/
 [telegram bot]: https://core.telegram.org/bots/api
 [ntfy-setup-basic]: https://docs.ntfy.sh/install/

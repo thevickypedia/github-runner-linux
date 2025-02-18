@@ -5,7 +5,7 @@ repo_level_runner() {
     REG_TOKEN=$(curl -sX POST \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Authorization: Bearer ${GIT_TOKEN}" \
-        "https://api.github.com/repos/${GIT_OWNER}/${GIT_REPOSITORY}/actions/runners/registration-token" \
+        "${GITHUB_API_URL}/repos/${GIT_OWNER}/${GIT_REPOSITORY}/actions/runners/registration-token" \
         | jq .token --raw-output)
     cd "/home/docker/actions-runner" || exit 1
     ./config.sh --unattended \
@@ -14,7 +14,7 @@ repo_level_runner() {
         --token "${REG_TOKEN}" \
         --name "${RUNNER_NAME}" \
         --runnergroup "${RUNNER_GROUP}" \
-        --url "https://github.com/${GIT_OWNER}/${GIT_REPOSITORY}"
+        --url "${GITHUB_SERVER_URL}/${GIT_OWNER}/${GIT_REPOSITORY}"
 }
 
 org_level_runner() {
@@ -24,7 +24,7 @@ org_level_runner() {
     REG_TOKEN=$(curl -sX POST \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Authorization: Bearer ${GIT_TOKEN}" \
-        "https://api.github.com/orgs/${GIT_OWNER}/actions/runners/registration-token" \
+        "${GITHUB_API_URL}/orgs/${GIT_OWNER}/actions/runners/registration-token" \
         | jq .token --raw-output)
     cd "/home/docker/actions-runner" || exit 1
     ./config.sh \
@@ -33,5 +33,5 @@ org_level_runner() {
         --token "${REG_TOKEN}" \
         --name "${RUNNER_NAME}" \
         --runnergroup "${RUNNER_GROUP}" \
-        --url "https://github.com/${GIT_OWNER}"
+        --url "${GITHUB_SERVER_URL}/${GIT_OWNER}"
 }

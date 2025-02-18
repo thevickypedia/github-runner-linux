@@ -43,6 +43,8 @@ docker compose -f docker-compose-amd64.yml up
 
 **Optional**
 
+- **GITHUB_API_URL** - GitHub API endpoint. Uses https://api.github.com by default.
+- **GITHUB_SERVER_URL** - GitHub server endpoint. Uses https://github.com by default.
 - **GIT_REPOSITORY** - Repository name _(required to create runners dedicated to a particular repo)_
 - **RUNNER_VERSION** - GitHub runner version. Uses `latest` runner version.
 - **RUNNER_GROUP** - Runner group. Uses `default`

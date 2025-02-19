@@ -43,14 +43,14 @@ docker compose -f docker-compose-amd64.yml up
 
 **Optional**
 
-- **GITHUB_API_URL** - GitHub API endpoint. Uses https://api.github.com by default.
-- **GITHUB_SERVER_URL** - GitHub server endpoint. Uses https://github.com by default.
+- **GITHUB_API_URL** - GitHub API endpoint. Defaults to https://api.github.com
+- **GITHUB_SERVER_URL** - GitHub server endpoint. Defaults to https://github.com
 - **GIT_REPOSITORY** - Repository name _(required to create runners dedicated to a particular repo)_
-- **RUNNER_VERSION** - GitHub runner version. Uses `latest` runner version.
+- **RUNNER_VERSION** - GitHub runner version. Defaults to `2.322.0`
 - **RUNNER_GROUP** - Runner group. Uses `default`
-- **RUNNER_NAME** - Runner name. Uses a random instance ID.
-- **WORK_DIR** - Work directory. Uses `_work`
-- **LABELS** - Runner labels (comma separated). Uses `"docker-node,${os_name}-${architecture}"`
+- **RUNNER_NAME** - Runner name. Defaults to a random instance ID.
+- **WORK_DIR** - Work directory. Defaults to `_work`
+- **LABELS** - Runner labels (comma separated). Defaults to `"docker-node,${os_name}-${architecture}"`
 - **REUSE_EXISTING** - Re-use existing configuration. Defaults to `false`
 
 > [!NOTE]

@@ -25,28 +25,23 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          platforms: linux/amd64,linux/arm64
-          tags: ${{ github.repository }}:${{ github.event.release.tag_name }},${{ github.repository }}:latest
-
       - name: Set repository info
         run: |
           if [[ -z "${{ env.repository_name }}" ]]; then
+            echo "::notice title=Unresolved GH context::GitHub context for 'repository.name' did not resolve"
             REPO_NAME="${GITHUB_REPOSITORY}"
           else
             REPO_NAME="${{ env.repository_name }}"
           fi
           if [ -z "$REPO_NAME" ]; then
+            echo "::warning title=Unresolved key::Guard rail for repository name failed, using fallback."
             echo "REPO_NAME=thevickypedia/github-runner-linux" >> $GITHUB_ENV
           else
             echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
           fi
 
           if [[ -z "${{ env.repository_desc }}" ]]; then
+            echo "::notice title=Unresolved GH context::GitHub context for 'repository.description' did not resolve"
             echo REPO_DESCRIPTION="Spin up an on-demand self-hosted GitHub action runner with multi-arch supported Ubuntu image." >> $GITHUB_ENV
           else
             echo REPO_DESCRIPTION="${{ env.repository_desc }}" >> $GITHUB_ENV
@@ -55,6 +50,14 @@ jobs:
         env:
           repository_name: "${{ github.repository.name }}"
           repository_desc: "${{ github.repository.description }}"
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ github.repository }}:${{ github.event.release.tag_name }},${{ github.repository }}:latest
 
       - name: Update description
         uses: thevickypedia/describe-docker@v1

@@ -33,11 +33,34 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ github.repository }}:${{ github.event.release.tag_name }},${{ github.repository }}:latest
 
+      - name: Set repository info
+        run: |
+          if [[ -z "${{ env.repository_name }}" ]]; then
+            REPO_NAME="${GITHUB_REPOSITORY}"
+          else
+            REPO_NAME="${{ env.repository_name }}"
+          fi
+          if [ -z "$REPO_NAME" ]; then
+            echo "REPO_NAME=thevickypedia/github-runner-linux" >> $GITHUB_ENV
+          else
+            echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+          fi
+
+          if [[ -z "${{ env.repository_desc }}" ]]; then
+            echo REPO_DESCRIPTION="Spin up an on-demand self-hosted GitHub action runner with multi-arch supported Ubuntu image." >> $GITHUB_ENV
+          else
+            echo REPO_DESCRIPTION="${{ env.repository_desc }}" >> $GITHUB_ENV
+          fi
+        shell: bash
+        env:
+          repository_name: "${{ github.repository.name }}"
+          repository_desc: "${{ github.repository.description }}"
+
       - name: Update description
         uses: thevickypedia/describe-docker@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          summary: "${{ github.repository.description }}"
-          repository: ${{ github.repository.name }}
+          summary: "${{ env.REPO_DESCRIPTION }}"
+          repository: "${{ env.REPO_NAME }}"
           filename: "README.md"

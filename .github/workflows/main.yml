@@ -51,6 +51,12 @@ jobs:
           repository_name: "${{ github.repository.name }}"
           repository_desc: "${{ github.repository.description }}"
 
+      - name: Check repository info
+        run: |
+          echo "::notice title=Repository Name::${{ env.REPO_NAME }}"
+          echo "::notice title=Repository Description::${{ env.REPO_DESCRIPTION }}"
+        shell: bash
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:

@@ -2,7 +2,7 @@
 services:
   runner:
     image: thevickypedia/github-runner-linux
-    restart: always
+    restart: unless-stopped
     # Load environment variables from a file
     # env_file: '.env'
     # Env vars defined under environment will override those from the env_file

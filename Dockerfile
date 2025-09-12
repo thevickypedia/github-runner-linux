@@ -3,7 +3,7 @@ FROM ubuntu:22.04
 SHELL ["/bin/bash", "-c"]
 
 ARG RUNNER_VERSION
-ENV RUNNER_VERSION="${RUNNER_VERSION:-2.322.0}"
+ENV RUNNER_VERSION="${RUNNER_VERSION:-2.328.0}"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV HOME="/home/docker"
 ENV RELEASE_URL="https://github.com/actions/runner/releases"
@@ -27,16 +27,16 @@ RUN apt-get install -y --no-install-recommends \
     build-essential \
     libssl-dev \
     libffi-dev \
-    python3.10 \
-    python3.10-venv \
-    python3.10-dev \
+    python3.11 \
+    python3.11-venv \
+    python3.11-dev \
     python3-pip \
     nodejs \
     npm \
     golang-go
 
 # Create a symbolic link for python pointing to python3.10
-RUN ln -s /usr/bin/python3.10 /usr/bin/python
+RUN ln -s /usr/bin/python3.11 /usr/bin/python
 
 # https://github.com/rust-lang/rustup/issues/297#issuecomment-444818896
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y

@@ -6,7 +6,7 @@ services:
       args:
         - PLATFORM=linux/arm64
     image: github-runner-linux
-    restart: no
+    restart: unless-stopped
     platform: linux/arm64
     # Load environment variables from a file
     # env_file: '.env'

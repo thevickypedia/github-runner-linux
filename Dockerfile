@@ -22,6 +22,7 @@ RUN apt-get install -y --no-install-recommends \
     wget \
     unzip \
     vim \
+    gh \
     git \
     jq \
     build-essential \

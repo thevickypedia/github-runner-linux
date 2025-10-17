@@ -3,7 +3,7 @@ FROM ubuntu:22.04
 SHELL ["/bin/bash", "-c"]
 
 ARG RUNNER_VERSION
-ENV RUNNER_VERSION="${RUNNER_VERSION:-2.328.0}"
+ENV RUNNER_VERSION="${RUNNER_VERSION:-2.329.0}"
 ENV DEBIAN_FRONTEND=noninteractive
 ENV HOME="/home/docker"
 ENV RELEASE_URL="https://github.com/actions/runner/releases"

@@ -16,6 +16,8 @@ case $unamem in
     architecture="armv6";;
 *armv7*)
     architecture="armv7";;
+*arm*)
+    architecture="arm";;
 *)
     echo "Unknown architecture: $unamem"
     ;;
@@ -40,3 +42,30 @@ else
     echo "Unknown OS: $(uname)"
 fi
 export os_name="${os_name}"
+export platform="${os_name}-${architecture}"
+
+# Map architecture and os_name to the list used by GitHub runners
+# https://github.com/actions/runner/releases
+
+case $architecture in
+"amd64")
+    runner_arch="x64";;
+"386")
+    runner_arch="x86";;
+"armv5"|"armv6"|"armv7"|"arm")
+    runner_arch="arm";;
+*)
+    runner_arch="$architecture";;
+esac
+export runner_arch="${runner_arch}"
+
+case $os_name in
+"darwin")
+    runner_os="osx";;
+"windows")
+    runner_os="win";;
+*)
+    runner_os="$os_name";;
+esac
+export runner_os="${runner_os}"
+export runner_platform="${runner_os}-${runner_arch}"

@@ -26,6 +26,7 @@ source "${current_dir}/detector.sh"
 source "${current_dir}/config.sh"
 source "${current_dir}/notify.sh"
 source "${current_dir}/squire.sh"
+source "${current_dir}/download.sh"
 
 # Env vars (docker-compose.yml)
 RUNNER_NAME="${RUNNER_NAME:-"$(instance_id)"}"
@@ -44,6 +45,7 @@ if [[ "$REUSE_EXISTING" == "true" || "$REUSE_EXISTING" == "1" ]] &&
     reused="reusing existing configuration"
     cd "/home/docker/actions-runner" || exit 1
 else
+  download_runner
   if [[ -n "$GIT_REPOSITORY" ]]; then
     log "Creating a repository level self-hosted runner ['${RUNNER_NAME}'] for ${GIT_REPOSITORY}"
     repo_level_runner

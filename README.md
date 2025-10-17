@@ -127,25 +127,6 @@ export CHAT_ID=$(curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getU
 
 </details>
 
-## Development
-
-Set latest `RUNNER_VERSION`
-
-```shell
-RUNNER_VERSION=$(curl -sL \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/repos/actions/runner/releases/latest | jq .tag_name --raw-output)
-
-export RUNNER_VERSION="${RUNNER_VERSION#?}"
-```
-
-#### Build
-
-```shell
-docker build --build-arg RUNNER_VERSION=$RUNNER_VERSION -t runner .
-```
-
 [badges-test]: https://github.com/thevickypedia/github-runner-linux/actions/workflows/test.yml/badge.svg
 [links-test]: https://github.com/thevickypedia/github-runner-linux/actions/workflows/test.yml
 [badges-build]: https://github.com/thevickypedia/github-runner-linux/actions/workflows/main.yml/badge.svg

@@ -8,7 +8,7 @@ repo_level_runner() {
         "${GITHUB_API_URL}/repos/${GIT_OWNER}/${GIT_REPOSITORY}/actions/runners/registration-token" \
         | jq .token --raw-output)
     log "Obtained registration token for repository ${GIT_OWNER}/${GIT_REPOSITORY}"
-    ./config.sh --unattended \
+    ./config.sh \
         --work "${WORK_DIR}" \
         --labels "${LABELS}" \
         --token "${REG_TOKEN}" \
@@ -27,7 +27,7 @@ org_level_runner() {
         "${GITHUB_API_URL}/orgs/${GIT_OWNER}/actions/runners/registration-token" \
         | jq .token --raw-output)
     log "Obtained registration token for organization ${GIT_OWNER}"
-    ./config.sh --unattended \
+    ./config.sh \
         --work "${WORK_DIR}" \
         --labels "${LABELS}" \
         --token "${REG_TOKEN}" \

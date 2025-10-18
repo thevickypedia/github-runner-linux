@@ -44,7 +44,6 @@ fi
 export os_name="${os_name}"
 export platform="${os_name}-${architecture}"
 
-# TODO: Merge with case statements above
 # Map architecture and os_name to the list used by GitHub runners
 # https://github.com/actions/runner/releases
 

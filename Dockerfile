@@ -52,7 +52,10 @@ ENV PATH="${HOME}/.cargo/bin:${PATH}"
 
 # Copy ALL scripts make them executable
 COPY scripts/* ./
-RUN chmod +x *.sh && chown -R docker:docker ${HOME}
+RUN chmod +x *.sh && \
+    # Try to download the latest runner during build time
+    ./image.sh && \
+    chown -R docker:docker ${HOME}
 
 # Set the user to "docker" so all subsequent commands are run as the docker user
 USER docker

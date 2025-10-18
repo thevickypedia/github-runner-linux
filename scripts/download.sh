@@ -1,7 +1,7 @@
 #!/bin/bash
 
 log "Fetching latest GitHub Actions Runner version..."
-LATEST_RUNNER_VERSION=$(curl -sL \
+export LATEST_RUNNER_VERSION=$(curl -sL \
     -H "Accept: application/vnd.github+json" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     https://api.github.com/repos/actions/runner/releases/latest | jq .tag_name --raw-output)
@@ -34,6 +34,7 @@ download_runner() {
     mkdir actions-runner && cd actions-runner
 
     archive="actions-runner-${runner_os}-${runner_arch}-${RUNNER_VERSION}.tar.gz"
+    log "Downloading GitHub Actions Runner version: ${RUNNER_VERSION} as ${archive} ..."
     curl -kOL ${RELEASE_URL}/download/v${RUNNER_VERSION}/${archive}
     sleep 2
     tar xzf ./${archive}

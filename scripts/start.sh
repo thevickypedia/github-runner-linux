@@ -21,10 +21,6 @@ if [[ -z "$GIT_TOKEN" ]]; then
 	exit 1
 fi
 
-# Set defaults
-os_name=""
-architecture=""
-
 # Get to the current directory
 current_dir="$(dirname "$(realpath "$0")")"
 source "${current_dir}/detector.sh"

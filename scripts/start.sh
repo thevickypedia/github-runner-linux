@@ -36,7 +36,7 @@ log "RUNTIME_ID: ${RUNTIME_ID}"
 RUNNER_NAME="${RUNNER_NAME:-"$(instance_id)"}"
 RUNNER_GROUP="${RUNNER_GROUP:-"default"}"
 WORK_DIR="${WORK_DIR:-"_work"}"
-LABELS="${LABELS:-"docker-node,$CPU_NAME,$RUNTIME_ID"}"
+LABELS="${LABELS:-"docker-node,$CURRENT_PLATFORM,$RUNTIME_ID"}"
 REUSE_EXISTING="${REUSE_EXISTING:-"false"}"
 
 # If not latest runner, download it

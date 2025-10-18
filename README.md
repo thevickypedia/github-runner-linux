@@ -8,13 +8,13 @@ Spin up an on-demand self-hosted GitHub action runner with multi-arch supported 
 
 ## Usage
 
-**Pre-built [platform agnostic]**
+**Pre-built [platform/architecture agnostic]**
 
 ```shell
 docker run thevickypedia/github-runner-linux
 ```
 
-**Build from source [platform specific]**
+**Build from source [platform/architecture specific]**
 
 ```shell
 git clone https://github.com/thevickypedia/github-runner-linux.git
@@ -50,7 +50,7 @@ docker compose -f docker-compose-amd64.yml up
 - **RUNNER_GROUP** - Runner group. Uses `default`
 - **RUNNER_NAME** - Runner name. Defaults to a random instance ID.
 - **WORK_DIR** - Work directory. Defaults to `_work`
-- **LABELS** - Runner labels (comma separated). Defaults to `"docker-node,${os_name}-${architecture}"`
+- **LABELS** - Runner labels (comma separated). Defaults to `"docker-node,${CPU_NAME},${RUNTIME_ID}"`
 - **REUSE_EXISTING** - Re-use existing configuration. Defaults to `false`
 
 > [!NOTE]

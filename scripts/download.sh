@@ -33,7 +33,7 @@ download_runner() {
     rm -rf /home/docker/actions-runner
     mkdir actions-runner && cd actions-runner
 
-    archive="actions-runner-${runner_os}-${runner_arch}-${RUNNER_VERSION}.tar.gz"
+    archive="actions-runner-${RUNTIME_ID}-${RUNNER_VERSION}.tar.gz"
     log "Downloading GitHub Actions Runner version: ${RUNNER_VERSION} as ${archive} ..."
     curl -kOL ${RELEASE_URL}/download/v${RUNNER_VERSION}/${archive}
     sleep 2

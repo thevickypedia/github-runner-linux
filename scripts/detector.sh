@@ -1,71 +1,71 @@
 #!/bin/bash
+# This script is a skim of https://github.com/actions/runner/blob/c3bf70b/src/dev.sh
 
-# NOTE: `uname -m` is more accurate and universal than `arch`
-# See https://en.wikipedia.org/wiki/Uname
-unamem="$(uname -m)"
-case $unamem in
-*aarch64*|arm64)
-    architecture="arm64";;
-*64*)
-    architecture="amd64";;
-*86*)
-    architecture="386";;
-*armv5*)
-    architecture="armv5";;
-*armv6*)
-    architecture="armv6";;
-*armv7*)
-    architecture="armv7";;
-*arm*)
-    architecture="arm";;
-*)
-    echo "Unknown architecture: $unamem"
-    ;;
-esac
-export architecture="${architecture}"
-
-unameu="$(tr '[:lower:]' '[:upper:]' <<< "$(uname)")"
-if [[ $unameu == *DARWIN* ]]; then
-    os_name="darwin"
-elif [[ $unameu == *LINUX* ]]; then
-    os_name="linux"
-elif [[ $unameu == *FREEBSD* ]]; then
-    os_name="freebsd"
-elif [[ $unameu == *NETBSD* ]]; then
-    os_name="netbsd"
-elif [[ $unameu == *OPENBSD* ]]; then
-    os_name="openbsd"
-elif [[ $unameu == *WIN* || $unameu == MSYS* ]]; then
-    # Should catch cygwin
-    os_name="windows"
-else
-    echo "Unknown OS: $(uname)"
+RUNTIME_ID="linux-x64"
+CPU_NAME="x86_64"
+if command -v uname > /dev/null; then
+    CPU_NAME=$(uname -m)
+    case $CPU_NAME in
+        armv7l) RUNTIME_ID="linux-arm";;
+        aarch64) RUNTIME_ID="linux-arm64";;
+    esac
 fi
-export os_name="${os_name}"
-export platform="${os_name}-${architecture}"
 
-# Map architecture and os_name to the list used by GitHub runners
-# https://github.com/actions/runner/releases
+# Non-dockerized builds
 
-case $architecture in
-"amd64")
-    runner_arch="x64";;
-"386")
-    runner_arch="x86";;
-"armv5"|"armv6"|"armv7"|"arm")
-    runner_arch="arm";;
-*)
-    runner_arch="$architecture";;
-esac
-export runner_arch="${runner_arch}"
+# CURRENT_PLATFORM="windows"
+# if [[ ($(uname) == "Linux") || ($(uname) == "Darwin") ]]; then
+#     CURRENT_PLATFORM=$(uname | awk '{print tolower($0)}')
+# fi
 
-case $os_name in
-"darwin")
-    runner_os="osx";;
-"windows")
-    runner_os="win";;
-*)
-    runner_os="$os_name";;
-esac
-export runner_os="${runner_os}"
-export runner_platform="${runner_os}-${runner_arch}"
+# if [[ "$CURRENT_PLATFORM" == 'windows' ]]; then
+#     RUNTIME_ID='win-x64'
+#     if [[ "$PROCESSOR_ARCHITECTURE" == 'x86' ]]; then
+#         RUNTIME_ID='win-x86'
+#     fi
+#     if [[ "$PROCESSOR_ARCHITECTURE" == 'ARM64' ]]; then
+#         RUNTIME_ID='win-arm64'
+#     fi
+# elif [[ "$CURRENT_PLATFORM" == 'linux' ]]; then
+#     RUNTIME_ID="linux-x64"
+#     if command -v uname > /dev/null; then
+#         CPU_NAME=$(uname -m)
+#         case $CPU_NAME in
+#             armv7l) RUNTIME_ID="linux-arm";;
+#             aarch64) RUNTIME_ID="linux-arm64";;
+#         esac
+#     fi
+# elif [[ "$CURRENT_PLATFORM" == 'darwin' ]]; then
+#     RUNTIME_ID='osx-x64'
+#     if command -v uname > /dev/null; then
+#         CPU_NAME=$(uname -m)
+#         case $CPU_NAME in
+#             arm64) RUNTIME_ID="osx-arm64";;
+#         esac
+#     fi
+# fi
+
+# if [[ -n "$DEV_TARGET_RUNTIME" ]]; then
+#     RUNTIME_ID="$DEV_TARGET_RUNTIME"
+# fi
+
+# # Make sure current platform support publish the dotnet runtime
+# # Windows can publish win-x86/x64/arm64
+# # Linux can publish linux-x64/arm/arm64
+# # OSX can publish osx-x64/arm64
+# if [[ "$CURRENT_PLATFORM" == 'windows' ]]; then
+#     if [[ ("$RUNTIME_ID" != 'win-x86') && ("$RUNTIME_ID" != 'win-x64') && ("$RUNTIME_ID" != 'win-arm64') ]]; then
+#         echo "Failed: Can't build $RUNTIME_ID package $CURRENT_PLATFORM" >&2
+#         exit 1
+#     fi
+# elif [[ "$CURRENT_PLATFORM" == 'linux' ]]; then
+#     if [[ ("$RUNTIME_ID" != 'linux-x64') && ("$RUNTIME_ID" != 'linux-x86') && ("$RUNTIME_ID" != 'linux-arm64') && ("$RUNTIME_ID" != 'linux-arm') ]]; then
+#        echo "Failed: Can't build $RUNTIME_ID package $CURRENT_PLATFORM" >&2
+#        exit 1
+#     fi
+# elif [[ "$CURRENT_PLATFORM" == 'darwin' ]]; then
+#     if [[ ("$RUNTIME_ID" != 'osx-x64') && ("$RUNTIME_ID" != 'osx-arm64') ]]; then
+#        echo "Failed: Can't build $RUNTIME_ID package $CURRENT_PLATFORM" >&2
+#        exit 1
+#     fi
+# fi

@@ -29,14 +29,14 @@ source "${current_dir}/notify.sh"
 source "${current_dir}/squire.sh"
 source "${current_dir}/download.sh"
 
-log "Detected platform: ${platform}"
-log "Mapped runner platform: ${runner_platform}"
+log "CPU_NAME: ${CPU_NAME}"
+log "RUNTIME_ID: ${RUNTIME_ID}"
 
 # Env vars (docker-compose.yml)
 RUNNER_NAME="${RUNNER_NAME:-"$(instance_id)"}"
 RUNNER_GROUP="${RUNNER_GROUP:-"default"}"
 WORK_DIR="${WORK_DIR:-"_work"}"
-LABELS="${LABELS:-"docker-node,$platform,$runner_platform"}"
+LABELS="${LABELS:-"docker-node,$CPU_NAME,$RUNTIME_ID"}"
 REUSE_EXISTING="${REUSE_EXISTING:-"false"}"
 
 # If not latest runner, download it

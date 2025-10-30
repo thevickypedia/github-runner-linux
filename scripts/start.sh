@@ -39,8 +39,8 @@ WORK_DIR="${WORK_DIR:-"_work"}"
 LABELS="${LABELS:-"docker-node,$CURRENT_PLATFORM,$RUNTIME_ID"}"
 REUSE_EXISTING="${REUSE_EXISTING:-"false"}"
 
-# If not latest runner, download it
-if ! latest_runner; then
+# If a runner is not installed or force rebuild is set, download runner image
+if download_required; then
   download_runner
 fi
 

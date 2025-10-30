@@ -7,21 +7,31 @@ export LATEST_RUNNER_VERSION=$(curl -sL \
     https://api.github.com/repos/actions/runner/releases/latest | jq .tag_name --raw-output)
 log "Latest version is: ${LATEST_RUNNER_VERSION}"
 
-latest_runner() {
+download_required() {
+    if "${FORCE_REBUILD:-false}"; then
+        log "Force rebuild is set. Download required."
+        return 0
+    fi
     if [ ! -f ./actions-runner/bin/Runner.Listener ]; then
         log "GitHub Actions Runner is not installed."
-        return 1
+        return 0
     fi
     # Outputs without the 'v' prefix
     CURRENT_VERSION=$(./actions-runner/bin/Runner.Listener --version)
+    # check if both current and latest versions are set
+    if [ -z "${CURRENT_VERSION}" ] || [ -z "${LATEST_RUNNER_VERSION}" ]; then
+        log "Could not determine current or latest runner version."
+        log "Current: '${CURRENT_VERSION}', Latest: '${LATEST_RUNNER_VERSION}'"
+        return 0
+    fi
     log "Current GitHub Actions Runner version is: ${CURRENT_VERSION}"
     if [ "${CURRENT_VERSION}" != "${LATEST_RUNNER_VERSION#v}" ]; then
         log "A new version of GitHub Actions Runner is available."
-        return 1
+        return 0
     fi
     log "GitHub Actions Runner is up to date."
-    # Return true
-    return 0
+    # Return false
+    return 1
 }
 
 download_runner() {

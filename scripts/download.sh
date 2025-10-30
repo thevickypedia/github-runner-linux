@@ -50,9 +50,14 @@ download_runner() {
     tar xzf ./${archive}
     sleep 2
 
-    log "Installing dependencies for the runner..."
-    chmod +x bin/installdependencies.sh
-    sudo ./bin/installdependencies.sh
+    user_id=`id -u`
+    if [ $user_id -ne 0 ]; then
+        log "non-root [${whoami}:${user_id}] user, skipping dependency installation."
+    else
+        log "Installing dependencies for the runner..."
+        chmod +x bin/installdependencies.sh
+        sudo ./bin/installdependencies.sh
+    fi
 
     log "Cleaning up apt cache..."
     sudo apt-get clean

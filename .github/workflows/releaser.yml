@@ -1,5 +1,5 @@
 ---
-name: Sync GitHub Actions Runner Releases
+name: Sync GHA Runner
 
 on:
   workflow_dispatch:
@@ -35,9 +35,6 @@ jobs:
             echo "::debug::Current GitHub Actions Runner version is: ${{ env.LATEST_RUNNER_VERSION }}"
             if [ "${{ env.LATEST_RUNNER_VERSION }}" != "${{ env.LATEST_RELEASE_VERSION }}" ]; then
                 echo "::notice title=${{ env.LATEST_RUNNER_VERSION }}::A new version of GitHub Actions Runner is available."
-
-                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-                git config user.name "github-actions[bot]"
 
                 notes="- [${{ env.LATEST_RUNNER_VERSION }}](https://github.com/actions/runner/releases/tag/${{ env.LATEST_RUNNER_VERSION }})"
                 echo "$notes" > release_notes.txt

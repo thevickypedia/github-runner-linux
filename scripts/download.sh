@@ -8,7 +8,7 @@ export LATEST_RUNNER_VERSION=$(curl -sL \
 log "Latest version is: ${LATEST_RUNNER_VERSION}"
 
 download_required() {
-    if "${FORCE_REBUILD:-false}"; then
+    if [ "${FORCE_REBUILD:-false}" = "true" ]; then
         log "Force rebuild is set. Download required."
         return 0
     fi

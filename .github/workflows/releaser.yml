@@ -10,6 +10,9 @@ jobs:
   release:
     runs-on: thevickypedia-default
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
       - name: Get Latest Runner Version
         run: |
           export LATEST_RUNNER_VERSION=$(curl -sL \
@@ -18,23 +21,21 @@ jobs:
             https://api.github.com/repos/actions/runner/releases/latest | jq .tag_name --raw-output)
           echo "LATEST_RUNNER_VERSION=$LATEST_RUNNER_VERSION" >> $GITHUB_ENV
         shell: bash
-      - name: Get Latest Release Version
-        run: |
-          export LATEST_RELEASE_VERSION=$(curl -sL \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/${{ github.repository }}/releases/latest | jq .tag_name --raw-output)
-          echo "LATEST_RELEASE_VERSION=$LATEST_RELEASE_VERSION" >> $GITHUB_ENV
-        shell: bash
+
       - name: Judgement Day
         run: |
-            if [ -z "${{ env.LATEST_RUNNER_VERSION }}" ] || [ -z "${{ env.LATEST_RELEASE_VERSION }}" ]; then
-                echo "::error title=Version404::Current: '${{ env.LATEST_RUNNER_VERSION }}', Latest: '${{ env.LATEST_RELEASE_VERSION }}'"
-                exit 1
-            fi
-            echo "::debug::Current GitHub Actions Runner version is: ${{ env.LATEST_RUNNER_VERSION }}"
-            if [ "${{ env.LATEST_RUNNER_VERSION }}" != "${{ env.LATEST_RELEASE_VERSION }}" ]; then
+            FOUND=$(curl -sL \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                https://api.github.com/repos/${{ github.repository }}/releases \
+                | jq --arg v "${{ env.LATEST_RUNNER_VERSION }}" \
+                    '[.[].tag_name] | index($v) != null')
+
+            if [ "$FOUND" != "true" ]; then
                 echo "::notice title=${{ env.LATEST_RUNNER_VERSION }}::A new version of GitHub Actions Runner is available."
+
+                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                git config user.name "github-actions[bot]"
 
                 notes="- [${{ env.LATEST_RUNNER_VERSION }}](https://github.com/actions/runner/releases/tag/${{ env.LATEST_RUNNER_VERSION }})"
                 echo "$notes" > release_notes.txt

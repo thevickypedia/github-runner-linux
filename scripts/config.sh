@@ -9,6 +9,8 @@ repo_level_runner() {
         | jq .token --raw-output)
     log "Obtained registration token for repository ${GIT_OWNER}/${GIT_REPOSITORY}"
     ./config.sh \
+        --unattended \
+        --replace \
         --work "${WORK_DIR}" \
         --labels "${LABELS}" \
         --token "${REG_TOKEN}" \
@@ -28,6 +30,8 @@ org_level_runner() {
         | jq .token --raw-output)
     log "Obtained registration token for organization ${GIT_OWNER}"
     ./config.sh \
+        --unattended \
+        --replace \
         --work "${WORK_DIR}" \
         --labels "${LABELS}" \
         --token "${REG_TOKEN}" \

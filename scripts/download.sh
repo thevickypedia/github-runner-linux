@@ -19,8 +19,12 @@ download_required() {
     # Outputs without the 'v' prefix
     CURRENT_VERSION=$(./actions-runner/bin/Runner.Listener --version)
     # check if both current and latest versions are set
-    if [ -z "${CURRENT_VERSION}" ] || [ -z "${LATEST_RUNNER_VERSION}" ]; then
-        log "Could not determine current or latest runner version."
+    if [ -z "${LATEST_RUNNER_VERSION}" ]; then
+        log "Unable to get latest runner version"
+        return 1
+    fi
+    if [ -z "${CURRENT_VERSION}" ]; then
+        log "Could not determine current runner version."
         log "Current: '${CURRENT_VERSION}', Latest: '${LATEST_RUNNER_VERSION}'"
         return 0
     fi

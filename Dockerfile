@@ -52,9 +52,10 @@ RUN PYTHON_MM=$(echo ${PYTHON_VERSION} | cut -d. -f1,2) && \
     apt-get install -y \
         python${PYTHON_MM} \
         python${PYTHON_MM}-venv \
-        python${PYTHON_MM}-dev && \
+        python${PYTHON_MM}-dev \
+        python3-pip && \
+    python${PYTHON_MM} -m pip install --upgrade pip && \
     ln -sf /usr/bin/python${PYTHON_MM} /usr/bin/python && \
-    ln -sf /usr/bin/pip3 /usr/bin/pip && \
     rm -rf /var/lib/apt/lists/*
 
 # ---- Install Node.js ----
